@@ -23,7 +23,7 @@ public class CCommand implements Command{
     public String getCommand() {
         String bin;
         if (cmd.length() == 3) {
-            bin = createBin('\0',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
+            bin = createBin('+',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
         } else if (cmd.length() == 2){
             bin = createBin(cmd.charAt(0),cmd.charAt(1));
         } else if (cmd.length() == 1){
@@ -31,7 +31,6 @@ public class CCommand implements Command{
         } else {
             throw new RuntimeException("Syntax error");
         }
-
         return bin;
     }
 
@@ -49,6 +48,9 @@ public class CCommand implements Command{
 
     private String createBin(char firstSign, char firstChar) {
         int zx, zy, nx, ny, f, ng;
+        if (firstChar == '1' && firstSign == '-'){
+            return "111010";
+        }
         if (firstChar == 'D'){
             zy = 1;
             zx = 0;

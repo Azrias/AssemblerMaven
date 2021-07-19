@@ -98,21 +98,21 @@ public class CCommandTest {
     @DisplayName("D=A-1")
     public void teasdsassstCadaadsaddsdsmd(){
         CCommand cmd = new CCommand("D=A-1");
-        assertEquals("110011",cmd.getCommand());
+        assertEquals("110010",cmd.getCommand());
     }
 
     @Test
     @DisplayName("D=-D")
     public void teasdsaassdstCadaddasadsdsmd(){
         CCommand cmd = new CCommand("D=-D");
-        assertEquals("011111",cmd.getCommand());
+        assertEquals("001111",cmd.getCommand());
     }
 
     @Test
     @DisplayName("D=-A")
     public void teasdsaassdstCdadadasadsdsmd(){
         CCommand cmd = new CCommand("D=-A");
-        assertEquals("110111",cmd.getCommand());
+        assertEquals("110011",cmd.getCommand());
     }
 
     @Test

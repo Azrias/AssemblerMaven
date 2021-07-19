@@ -25,7 +25,7 @@ public class CCommand implements Command{
         if (cmd.length() == 3) {
             bin = createBin('+',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
         } else if (cmd.length() == 2){
-            bin = createBin(cmd.charAt(1),cmd.charAt(0),'\0','\0');
+            bin = createBin(cmd.charAt(0),cmd.charAt(1));
         } else if (cmd.length() == 1){
             bin = createBin('\0',cmd.charAt(0),'\0','\0');
         } else {
@@ -35,10 +35,24 @@ public class CCommand implements Command{
         return bin;
     }
 
-    private String createBin(char firstSign,char firstChar,char secondSign,char secondChar){
+    private String createBin(char firstSign, char firstChar) {
+        int zx, zy, nx, ny, f, ng;
+        if (firstChar == 'D'){
+            zy = 1;
+            zx = 0;
+        } else {
+            zy = 0;
+            zx = 1;
+        }
+        if (firstSign == '-'){
+
+        }
+    }
+
+    private String createBin(char firstSign, char firstChar, char secondSign, char secondChar){
         int zx, zy, nx, ny, f, ng;
 
-        if(secondChar == 'D') {
+        if(secondChar == 'D' || firstChar == 'A') {
             char temp = firstSign;
             firstSign = secondSign;
             secondSign = temp;
@@ -47,12 +61,20 @@ public class CCommand implements Command{
             secondChar = temp;
         }
 
-        if (firstChar == '\0') {
+        if (secondSign == '&'){
+            return "000000";
+        }
+
+        if (secondSign == '|'){
+            return "010101";
+        }
+
+        if (firstChar == '\0' || firstChar == '1') {
             zx = 1;
         } else {
             zx = 0;
         }
-        if (secondChar == '\0') {
+        if (secondChar == '\0' || secondChar == '1') {
             zy = 1;
         } else {
             zy = 0;

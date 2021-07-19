@@ -66,4 +66,67 @@ public class CCommandTest {
         CCommand cmd = new CCommand("D=D-A");
         assertEquals("010011",cmd.getCommand());
     }
+
+    @Test
+    @DisplayName("D=D&A")
+    public void teasdsassstCadaasadsdsmd(){
+        CCommand cmd = new CCommand("D=D&A");
+        assertEquals("000000",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=D|A")
+    public void teasdsaassstCadaasadsdsmd(){
+        CCommand cmd = new CCommand("D=D|A");
+        assertEquals("010101",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=D+1")
+    public void teasdsassstCadaadsadsdsmd(){
+        CCommand cmd = new CCommand("D=D+1");
+        assertEquals("001010",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=D-1")
+    public void teasdsaassstCadadasadsdsmd(){
+        CCommand cmd = new CCommand("D=D-1");
+        assertEquals("011011",cmd.getCommand());
+    }
+    @Test
+    @DisplayName("D=A-1")
+    public void teasdsassstCadaadsaddsdsmd(){
+        CCommand cmd = new CCommand("D=A-1");
+        assertEquals("110011",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=-D")
+    public void teasdsaassdstCadaddasadsdsmd(){
+        CCommand cmd = new CCommand("D=-D");
+        assertEquals("011111",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=-A")
+    public void teasdsaassdstCdadadasadsdsmd(){
+        CCommand cmd = new CCommand("D=-A");
+        assertEquals("110111",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=A")
+    public void teasdsaassdstCdadaddasadsdsmd(){
+        CCommand cmd = new CCommand("D=A");
+        assertEquals("110000",cmd.getCommand());
+    }
+
+    @Test
+    @DisplayName("D=D")
+    public void teasdsaassdstCddadadasadsdsmd(){
+        CCommand cmd = new CCommand("D=D");
+        assertEquals("001100",cmd.getCommand());
+    }
+
 }

@@ -54,16 +54,16 @@ public class CCommandTest {
     }
 
     @Test
-    @DisplayName("D=D-A")
+    @DisplayName("D=A-D")
     public void testCadaasadsdsmd(){
-        CCommand cmd = new CCommand("D=D-A");
+        CCommand cmd = new CCommand("D=A-D");
         assertEquals("000111",cmd.getCommand());
     }
 
     @Test
-    @DisplayName("D=-A")
+    @DisplayName("D=D-A")
     public void teasdsasstCadaasadsdsmd(){
-        CCommand cmd = new CCommand("D=-A");
-        assertEquals("100111",cmd.getCommand());
+        CCommand cmd = new CCommand("D=D-A");
+        assertEquals("010011",cmd.getCommand());
     }
 }

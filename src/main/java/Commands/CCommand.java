@@ -23,11 +23,11 @@ public class CCommand implements Command{
     public String getCommand() {
         String bin;
         if (cmd.length() == 3) {
-            bin = createBin(cmd.charAt(0),cmd.charAt(1),cmd.charAt(2),3);
+            bin = createBin('+',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
         } else if (cmd.length() == 2){
-            bin = createBin(cmd.charAt(0),cmd.charAt(1),'\0',2);
+            bin = createBin(cmd.charAt(1),cmd.charAt(0),'\0','\0');
         } else if (cmd.length() == 1){
-            bin = createBin(cmd.charAt(0),'\0','\0', 1);
+            bin = createBin('\0',cmd.charAt(0),'\0','\0');
         } else {
             throw new RuntimeException("Syntax error");
         }
@@ -35,41 +35,47 @@ public class CCommand implements Command{
         return bin;
     }
 
-    private String createBin(char firstChar,char operation,char secondChar,int length){
-        int zx = 0;
-        int zy = 0;
-        int nx = 0;
-        int ny = 0;
-        int f= 0;
-        int ng = 0;
+    private String createBin(char firstSign,char firstChar,char secondSign,char secondChar){
+        int zx, zy, nx, ny, f, ng;
+
+        if(secondChar == 'D') {
+            char temp = firstSign;
+            firstSign = secondSign;
+            secondSign = temp;
+            temp = firstChar;
+            firstChar = secondChar;
+            secondChar = temp;
+        }
+
         if (firstChar == '\0') {
-            zx = 0; //TODO D должна идти первой
+            zx = 1;
+        } else {
+            zx = 0;
         }
         if (secondChar == '\0') {
-            zy = 0; //TODO D должна идти первой
+            zy = 1;
+        } else {
+            zy = 0;
         }
-        if (operation == '+') {
-            f = 1;
-        } else if (operation == '|') {
-            return  "010101";
-        } else if (operation == '-') {
-            f = 1;
+
+        f=1;
+        if (firstSign == '+' && secondSign == '+'){
+            nx = 0;
+            ny = 0;
+            ng = 0;
+        } else  if (firstSign == '+' && secondSign == '-') {
+            nx = 1;
+            ny = 0;
             ng = 1;
-            if (length == 2) {
-                if (firstChar == 'D'){
-                    nx = 0;
-                } else {
-                    ny = 1;
-                }
-            } else {
-                if (firstChar == 'D'){
-                    ny = 1;
-                } else {
-                    nx = 0;
-                }
-            }
+        } else  if (firstSign == '-' && secondSign == '+') {
+            nx = 0;
+            ny = 1;
+            ng = 1;
+        } else {
+            throw new RuntimeException("Syntax error");
         }
-        return String.valueOf(zx) + zy + nx + ny + f + ng;
+
+        return String.valueOf(zx) + nx + zy + ny + f + ng;
     }
 
     public CCommand( String currentCommand) {
@@ -85,7 +91,7 @@ public class CCommand implements Command{
             currentCommand = currentCommand + ';';
         }
 
-        String[] split = currentCommand.split("=|;");
+        String[] split = currentCommand.split("[=;]");
         String[] splitEnsure = Arrays.copyOf(split,3);
 
         memAloc = splitEnsure[0];

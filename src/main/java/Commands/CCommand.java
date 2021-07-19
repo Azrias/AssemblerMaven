@@ -23,16 +23,28 @@ public class CCommand implements Command{
     public String getCommand() {
         String bin;
         if (cmd.length() == 3) {
-            bin = createBin('+',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
+            bin = createBin('\0',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
         } else if (cmd.length() == 2){
             bin = createBin(cmd.charAt(0),cmd.charAt(1));
         } else if (cmd.length() == 1){
-            bin = createBin('\0',cmd.charAt(0),'\0','\0');
+            bin = createBin(cmd.charAt(0));
         } else {
             throw new RuntimeException("Syntax error");
         }
 
         return bin;
+    }
+
+    private String createBin(char firstChar) {
+        if (firstChar == 'D'){
+            return "001100";
+        } else if (firstChar == 'A'){
+            return "110000";
+        } else if (firstChar == '1'){
+            return "111111";
+        } else {
+            return "101010";
+        }
     }
 
     private String createBin(char firstSign, char firstChar) {
@@ -45,7 +57,19 @@ public class CCommand implements Command{
             zx = 1;
         }
         if (firstSign == '-'){
-
+            if (firstChar == 'D'){
+                return "001111";
+            } else {
+                return "110011";
+            }
+        } else if (firstSign == '!'){
+            if (firstChar == 'D'){
+                return "001101";
+            } else {
+                return "110001";
+            }
+        } else {
+            return "111010";
         }
     }
 

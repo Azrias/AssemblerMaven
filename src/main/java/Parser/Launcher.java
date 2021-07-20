@@ -1,8 +1,7 @@
 package Parser;
 
-import Commands.Command;
-
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Launcher {
@@ -16,9 +15,12 @@ public class Launcher {
         Parser parser = null;
         try (FileReader fileReader = new FileReader(arg)) {
             parser = new Parser(fileReader);
-            while (parser.hasMoreCommands()) {
-                parser.advance();
-                Command cmd = parser.getCurrentCommand();
+            try (FileWriter fileWriter = new FileWriter("file.hack")){
+                while (parser.hasMoreCommands()) {
+                    parser.advance();
+                    String currentCommand = parser.getBinOfCurrentCommand();
+                    fileWriter.write(currentCommand + "\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

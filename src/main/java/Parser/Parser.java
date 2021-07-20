@@ -13,7 +13,12 @@ public class Parser {
     private BufferedReader bufferedReader;
     private String currentCommand;
 
-    public Command getCurrentCommand() {
+    public String getBinOfCurrentCommand(){
+        Command cmd = this.getCurrentCommand();
+        return cmd.getCommand();
+    }
+
+    private Command getCurrentCommand() {
         Command cmd;
         if (currentCommand.charAt(0) == '@'){
             cmd = new ACommand(currentCommand);

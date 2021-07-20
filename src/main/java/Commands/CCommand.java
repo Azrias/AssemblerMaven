@@ -1,133 +1,85 @@
 package Commands;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class CCommand implements Command{
     private String memAloc;
     private String cmd;
     private String jump;
-
-    public String getJump() {
-        return jump;
-    }
-
-    public String getMemAloc() {
-        return memAloc;
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
+    private HashMap<String,String> mapcmd;
+    private HashMap<String,String> mapjump;
+    private HashMap<String,String> mapmem;
 
     @Override
     public String getCommand() {
-        String bin;
-        if (cmd.length() == 3) {
-            bin = createBin('+',cmd.charAt(0),cmd.charAt(1),cmd.charAt(2));
-        } else if (cmd.length() == 2){
-            bin = createBin(cmd.charAt(0),cmd.charAt(1));
-        } else if (cmd.length() == 1){
-            bin = createBin(cmd.charAt(0));
-        } else {
-            throw new RuntimeException("Syntax error");
-        }
-        return bin;
-    }
-
-    private String createBin(char firstChar) {
-        if (firstChar == 'D'){
-            return "001100";
-        } else if (firstChar == 'A'){
-            return "110000";
-        } else if (firstChar == '1'){
-            return "111111";
-        } else {
-            return "101010";
-        }
-    }
-
-    private String createBin(char firstSign, char firstChar) {
-        int zx, zy, nx, ny, f, ng;
-        if (firstChar == '1' && firstSign == '-'){
-            return "111010";
-        }
-        if (firstChar == 'D'){
-            zy = 1;
-            zx = 0;
-        } else {
-            zy = 0;
-            zx = 1;
-        }
-        if (firstSign == '-'){
-            if (firstChar == 'D'){
-                return "001111";
-            } else {
-                return "110011";
-            }
-        } else if (firstSign == '!'){
-            if (firstChar == 'D'){
-                return "001101";
-            } else {
-                return "110001";
-            }
-        } else {
-            return "111010";
-        }
-    }
-
-    private String createBin(char firstSign, char firstChar, char secondSign, char secondChar){
-        int zx, zy, nx, ny, f, ng;
-
-        if(secondChar == 'D' || firstChar == 'A') {
-            char temp = firstSign;
-            firstSign = secondSign;
-            secondSign = temp;
-            temp = firstChar;
-            firstChar = secondChar;
-            secondChar = temp;
-        }
-
-        if (secondSign == '&'){
-            return "000000";
-        }
-
-        if (secondSign == '|'){
-            return "010101";
-        }
-
-        if (firstChar == '\0' || firstChar == '1') {
-            zx = 1;
-        } else {
-            zx = 0;
-        }
-        if (secondChar == '\0' || secondChar == '1') {
-            zy = 1;
-        } else {
-            zy = 0;
-        }
-
-        f=1;
-        if (firstSign == '+' && secondSign == '+'){
-            nx = 0;
-            ny = 0;
-            ng = 0;
-        } else  if (firstSign == '+' && secondSign == '-') {
-            nx = 1;
-            ny = 0;
-            ng = 1;
-        } else  if (firstSign == '-' && secondSign == '+') {
-            nx = 0;
-            ny = 1;
-            ng = 1;
-        } else {
-            throw new RuntimeException("Syntax error");
-        }
-
-        return String.valueOf(zx) + nx + zy + ny + f + ng;
+        String binMem = mapmem.get(memAloc);
+        String binCmd = mapcmd.get(cmd);
+        String binJump = mapjump.get(jump);
+        return "111" + binCmd + binMem + binJump;
     }
 
     public CCommand( String currentCommand) {
         initFields(currentCommand);
+        mapmem = new HashMap<String,String>();
+        mapcmd = new HashMap<String,String>();
+        mapjump = new HashMap<String,String>();
+        createMapCmd();
+        mapPutJump();
+        mapPutDestination();
+    }
+
+    private void createMapCmd() {
+        mapcmd.put("0", "0101010");
+        mapcmd.put("1", "0111111");
+        mapcmd.put("-1", "0111010");
+        mapcmd.put("D", "0001100");
+        mapcmd.put("A", "0110000");
+        mapcmd.put("M", "1110000");
+        mapcmd.put("!D", "0001101");
+        mapcmd.put("!A", "0110001");
+        mapcmd.put("!M", "1110001");
+        mapcmd.put("-D", "0001111");
+        mapcmd.put("-A", "0110011");
+        mapcmd.put("-M", "1110011");
+        mapcmd.put("D+1", "0011111");
+        mapcmd.put("A+1", "0110111");
+        mapcmd.put("M+1", "1110111");
+        mapcmd.put("D-1", "0001110");
+        mapcmd.put("A-1", "0110010");
+        mapcmd.put("M-1", "1110010");
+        mapcmd.put("D+A", "0000010");
+        mapcmd.put("D+M", "1000010");
+        mapcmd.put("D-A", "0010011");
+        mapcmd.put("D-M", "1010011");
+        mapcmd.put("A-D", "0000111");
+        mapcmd.put("M-D", "1000111");
+        mapcmd.put("D&A", "0000000");
+        mapcmd.put("D&M", "1000000");
+        mapcmd.put("D|A", "0010101");
+        mapcmd.put("D|M", "1010101");
+    }
+
+    private void mapPutJump() {
+        mapjump.put(null, "000");
+        mapjump.put("JGT", "001");
+        mapjump.put("JEQ", "010");
+        mapjump.put("JGE", "011");
+        mapjump.put("JLT", "100");
+        mapjump.put("JNE", "101");
+        mapjump.put("JLE", "110");
+        mapjump.put("JMP", "111");
+    }
+
+    private void mapPutDestination() {
+        mapmem.put(null, "000");
+        mapmem.put("M", "001");
+        mapmem.put("D", "010");
+        mapmem.put("MD", "011");
+        mapmem.put("A", "100");
+        mapmem.put("AM", "101");
+        mapmem.put("AD", "110");
+        mapmem.put("AMD", "111");
     }
 
     private void initFields(String currentCommand) {
@@ -143,6 +95,9 @@ public class CCommand implements Command{
         String[] splitEnsure = Arrays.copyOf(split,3);
 
         memAloc = splitEnsure[0];
+        if (memAloc.equals("")){
+            memAloc = null;
+        }
         cmd = splitEnsure[1];
         jump = splitEnsure[2];
     }

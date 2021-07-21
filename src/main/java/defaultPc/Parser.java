@@ -42,10 +42,12 @@ public class Parser {
     }
 
     public void putToTableIfIsSymbolCommand(SymbolTable table){
-        counter++; //TODO doesn't spot count on marks
         if (isSymbolCommand()){
             table.addEntry(currentCommand,counter);
+            return;
         }
+        counter++;
+        return;
     }
 
     private boolean isSymbolCommand(){

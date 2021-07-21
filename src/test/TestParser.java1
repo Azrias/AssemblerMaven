@@ -1,0 +1,52 @@
+import defaultPc.Parser;
+import org.junit.Ignore;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+@Ignore
+public class TestParser {
+
+    static Parser parser = null;
+
+    @BeforeAll
+    public static void init(){
+        try {
+            parser = new Parser(new FileReader("D:\\\\downloads\\\\nand2tetris\\\\nand2tetris\\\\projects\\\\06\\\\max\\\\MaxL.asm"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @DisplayName("@itr")
+    public void testIsSymbolCommand1(){
+        boolean bool = parser.isSymbolCommand("@itr");
+        assertEquals(true, bool);
+    }
+
+    @Test
+    @DisplayName("@123")
+    public void testIsSymbolCommand2(){
+        boolean bool = parser.isSymbolCommand("@123");
+        assertEquals(false, bool);
+    }
+
+    @Test
+    @DisplayName("itr")
+    public void testIsSymbolCommand3(){
+        boolean bool = parser.isSymbolCommand("itr");
+        assertEquals(false, bool);
+    }
+
+    @Test
+    @DisplayName("13")
+    public void testIsSymbolCommand4(){
+        boolean bool = parser.isSymbolCommand("13");
+        assertEquals(false, bool);
+    }
+}

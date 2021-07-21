@@ -7,7 +7,10 @@ import java.io.IOException;
 public class Parser {
 
     private final BufferedReader bufferedReader;
+
     private String currentCommand;
+
+    int counter = 0;
 
     public String getBinOfCurrentCommand(){
         Code code = Code.getInstance();
@@ -31,6 +34,27 @@ public class Parser {
             currentCommand = bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void putToTableIfIsSymbolCommand(SymbolTable table){
+        counter++; //TODO doesn't spot count on marks
+        if (isSymbolCommand()){
+            table.addEntry(currentCommand,counter);
+        }
+    }
+
+    public boolean isSymbolCommand(){
+        String subStr = null;
+        if (!(currentCommand.charAt(0) == '@')) {
+            return false;
+        }
+        subStr = currentCommand.substring(1);
+        try {
+            Integer.parseInt(subStr);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 }

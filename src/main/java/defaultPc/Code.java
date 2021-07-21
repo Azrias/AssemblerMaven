@@ -33,6 +33,7 @@ public final class Code {
         return null;
     }
 
+    //TODO rename
     private String initFieldForA(String currentCommand) {
         String cmd = currentCommand.substring(1);
         int parseInt = Integer.parseInt(cmd);

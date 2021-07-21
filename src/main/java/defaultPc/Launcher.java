@@ -13,14 +13,14 @@ public class Launcher {
     }
 
     private void launch(String input, String output) {
-        File tmp = createTmpFile(input);
+        File tmp = createAndFillTmpFile(input);
         createHackFile(tmp, output);
     }
 
-    private File createTmpFile(String input) {
+    private File createAndFillTmpFile(String input) {
         SymbolTable table = createTable(input);
 
-        File file = createTmpFIle();
+        File file = createTmpFile();
 
         try (FileWriter tmpFileWriter = new FileWriter(file)) {
             try (FileReader fileReader = new FileReader(input)) {
@@ -33,7 +33,7 @@ public class Launcher {
         return file;
     }
 
-    private File createTmpFIle() {
+    private File createTmpFile() {
         try {
             return File.createTempFile("temp", "asm");
         } catch (IOException e) {
@@ -68,13 +68,13 @@ public class Launcher {
             Code code = Code.getInstance();
             parser.advance();
             String currentCommand = parser.getCurrentCommand();
-            if (code.getType(currentCommand) == CommandType.A_COMMAND){
-                if (table.contains(currentCommand.substring(1))){
+            if (code.getType(currentCommand) == CommandType.A_COMMAND
+            && table.contains(currentCommand.substring(1))) {
                     String cmd = table.getAddress(currentCommand.substring(1));
-                    tmpFileWriter.write(cmd);
-                }
+                    tmpFileWriter.append(cmd + "\n");
+
             } else {
-                tmpFileWriter.write(currentCommand);
+                tmpFileWriter.append(currentCommand + "\n");
             }
         }
     }

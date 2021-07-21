@@ -38,6 +38,14 @@ public final class Code {
         return String.copyValueOf(chars) + num;
     }
 
+    public CommandType getType(String currentCommand){
+        if (currentCommand.charAt(0) == '@') {
+            return CommandType.A_COMMAND;
+        } else {
+            return CommandType.C_COMMAND;
+        }
+    }
+
     private void setType(String currentCommand) {
         if (currentCommand.charAt(0) == '@') {
             type = CommandType.A_COMMAND;

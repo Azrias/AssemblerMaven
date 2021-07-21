@@ -8,6 +8,10 @@ public class Parser {
 
     private final BufferedReader bufferedReader;
 
+    public String getCurrentCommand() {
+        return currentCommand;
+    }
+
     private String currentCommand;
 
     int counter = 0;
@@ -44,12 +48,11 @@ public class Parser {
         }
     }
 
-    public boolean isSymbolCommand(){
-        String subStr = null;
+    private boolean isSymbolCommand(){
         if (!(currentCommand.charAt(0) == '@')) {
             return false;
         }
-        subStr = currentCommand.substring(1);
+        String subStr = currentCommand.substring(1);
         try {
             Integer.parseInt(subStr);
             return false;

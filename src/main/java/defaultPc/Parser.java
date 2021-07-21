@@ -1,8 +1,4 @@
-package Parser;
-
-import Commands.ACommand;
-import Commands.CCommand;
-import Commands.Command;
+package defaultPc;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,22 +6,12 @@ import java.io.IOException;
 
 public class Parser {
 
-    private BufferedReader bufferedReader;
+    private final BufferedReader bufferedReader;
     private String currentCommand;
 
     public String getBinOfCurrentCommand(){
-        Command cmd = this.getCurrentCommand();
-        return cmd.getCommand();
-    }
-
-    private Command getCurrentCommand() {
-        Command cmd;
-        if (currentCommand.charAt(0) == '@'){
-            cmd = new ACommand(currentCommand);
-        } else {
-            cmd = new CCommand(currentCommand);
-        }
-        return cmd;
+        Code code = Code.getInstance();
+        return code.getBin(currentCommand);
     }
 
     public Parser(FileReader in) {

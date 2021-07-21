@@ -1,35 +1,95 @@
-package Commands;
+package defaultPc;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class CCommand implements Command{
-    private String memAloc;
-    private String cmd;
-    private String jump;
+public final class Code {
+
+    private static final Code CODE = new Code();
+    private CommandType type;
+
     private HashMap<String,String> mapcmd;
     private HashMap<String,String> mapjump;
     private HashMap<String,String> mapmem;
+    private String memAloc;
+    private String cmd;
+    private String jump;
 
-    @Override
-    public String getCommand() {
+    public static Code getInstance() {
+        return CODE;
+    }
+
+    public String getBin(String currentCommand) {
+        setType(currentCommand);
+        if (type == CommandType.C_COMMAND){
+            initFields(currentCommand);
+            return buildBin();
+        }
+        if (type == CommandType.A_COMMAND) {
+            return initFieldForA(currentCommand);
+        }
+        return null;
+    }
+
+    private String initFieldForA(String currentCommand) {
+        String cmd = currentCommand.substring(1);
+        int parseInt = Integer.parseInt(cmd);
+
+        String num = Integer.toString(parseInt, 2);
+        int fill = 16 - num.length();
+
+        char[] chars = new char[fill];
+        Arrays.fill(chars,'0');
+
+        return String.copyValueOf(chars) + num;
+    }
+
+    private void setType(String currentCommand) {
+        if (currentCommand.charAt(0) == '@'){
+            type = CommandType.A_COMMAND;
+        } else {
+            type = CommandType.C_COMMAND;
+        }
+    }
+
+    @NotNull
+    private String buildBin() {
         String binMem = mapmem.get(memAloc);
         String binCmd = mapcmd.get(cmd);
         String binJump = mapjump.get(jump);
         return "111" + binCmd + binMem + binJump;
     }
 
-    public CCommand( String currentCommand) {
-        initFields(currentCommand);
-        mapmem = new HashMap<String,String>();
-        mapcmd = new HashMap<String,String>();
-        mapjump = new HashMap<String,String>();
+    private Code() {
         createMapCmd();
         mapPutJump();
         mapPutDestination();
     }
 
+    private void initFields(String currentCommand) {
+        if (!currentCommand.contains("=")) {
+            currentCommand = '=' + currentCommand;
+        }
+
+        if (!currentCommand.contains(";")) {
+            currentCommand = currentCommand + ';';
+        }
+
+        String[] split = currentCommand.split("[=;]");
+        String[] splitEnsure = Arrays.copyOf(split,3);
+
+        memAloc = splitEnsure[0];
+        if (memAloc.equals("")){
+            memAloc = null;
+        }
+        cmd = splitEnsure[1];
+        jump = splitEnsure[2];
+    }
+
     private void createMapCmd() {
+        mapcmd = new HashMap<>();
         mapcmd.put("0", "0101010");
         mapcmd.put("1", "0111111");
         mapcmd.put("-1", "0111010");
@@ -61,6 +121,7 @@ public class CCommand implements Command{
     }
 
     private void mapPutJump() {
+        mapjump = new HashMap<>();
         mapjump.put(null, "000");
         mapjump.put("JGT", "001");
         mapjump.put("JEQ", "010");
@@ -72,6 +133,7 @@ public class CCommand implements Command{
     }
 
     private void mapPutDestination() {
+        mapmem = new HashMap<>();
         mapmem.put(null, "000");
         mapmem.put("M", "001");
         mapmem.put("D", "010");
@@ -81,25 +143,4 @@ public class CCommand implements Command{
         mapmem.put("AD", "110");
         mapmem.put("AMD", "111");
     }
-
-    private void initFields(String currentCommand) {
-        if (!currentCommand.contains("=")) {
-            currentCommand = '=' + currentCommand;
-        }
-
-        if (!currentCommand.contains(";")) {
-            currentCommand = currentCommand + ';';
-        }
-
-        String[] split = currentCommand.split("[=;]");
-        String[] splitEnsure = Arrays.copyOf(split,3);
-
-        memAloc = splitEnsure[0];
-        if (memAloc.equals("")){
-            memAloc = null;
-        }
-        cmd = splitEnsure[1];
-        jump = splitEnsure[2];
-    }
-
 }

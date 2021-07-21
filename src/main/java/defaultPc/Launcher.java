@@ -71,10 +71,10 @@ public class Launcher {
             if (code.getType(currentCommand) == CommandType.A_COMMAND
             && table.contains(currentCommand.substring(1))) {
                     String cmd = table.getAddress(currentCommand.substring(1));
-                    tmpFileWriter.append(cmd + "\n");
+                    tmpFileWriter.append(cmd).append("\n");
 
             } else {
-                tmpFileWriter.append(currentCommand + "\n");
+                tmpFileWriter.append(currentCommand).append("\n");
             }
         }
     }

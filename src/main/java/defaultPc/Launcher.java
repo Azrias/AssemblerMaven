@@ -13,22 +13,43 @@ public class Launcher {
     }
 
     private void launch(String input, String output) {
-        String tmp = createTmpFile(input);
+        File tmp = createTmpFile(input);
         createHackFile(tmp, output);
     }
 
-    private String createTmpFile(String input) {
+    private File createTmpFile(String input) {
         SymbolTable table = createTable(input);
 
-        try (FileWriter tmpFileWriter = new FileWriter(File.createTempFile("temp", "asm"))) {
-            try (FileReader fileReader = new FileReader("temp")) {
+        File file = createTmpFIle();
+
+        try (FileWriter tmpFileWriter = new FileWriter(file)) {
+            try (FileReader fileReader = new FileReader(input)) {
                 Parser parser = new Parser(fileReader);
                 writeToTmp(table, tmpFileWriter, parser);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "temp";
+        return file;
+    }
+
+    private File createTmpFIle() {
+        try {
+            return File.createTempFile("temp", "asm");
+        } catch (IOException e) {
+            throw new RuntimeException("creteTmpFIle went wrong");
+        }
+    }
+
+    private void createHackFile(File input, String output) {
+        try (FileReader fileReader = new FileReader(input)) {
+            Parser parser = new Parser(fileReader);
+            try (FileWriter fileWriter = new FileWriter(output)){
+                execute(parser, fileWriter);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private SymbolTable createTable(String input) {
@@ -58,16 +79,6 @@ public class Launcher {
         }
     }
 
-    private void createHackFile(String input, String output) {
-        try (FileReader fileReader = new FileReader(input)) {
-            Parser parser = new Parser(fileReader);
-            try (FileWriter fileWriter = new FileWriter(output)){
-                execute(parser, fileWriter);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private SymbolTable createSymbolTable(Parser parser) {
         SymbolTable table = new SymbolTable();

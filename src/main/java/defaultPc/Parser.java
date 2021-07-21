@@ -47,7 +47,6 @@ public class Parser {
             return;
         }
         counter++;
-        return;
     }
 
     private boolean isSymbolCommand(){

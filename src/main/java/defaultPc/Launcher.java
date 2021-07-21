@@ -36,8 +36,6 @@ public class Launcher {
         try (FileReader fileReader = new FileReader(input)) {
             Parser parser = new Parser(fileReader);
             table = createSymbolTable(parser);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

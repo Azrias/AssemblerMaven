@@ -48,7 +48,10 @@ public final class Code {
 
     private String getBinForCCommand(String currentCommand) {
         String[] parts = splitCurrentCommand(currentCommand);
-        return "111" + parts[0] + parts[1] + parts[2];
+        String binMem = mapMem.get(parts[0]);
+        String binCmd = mapCmd.get(parts[1]);
+        String binJump = mapJump.get(parts[2]);
+        return "111" + binMem + binCmd + binJump;
     }
 
     private Code() {

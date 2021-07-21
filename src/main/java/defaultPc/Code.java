@@ -1,7 +1,5 @@
 package defaultPc;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -10,12 +8,7 @@ public final class Code {
     private static final Code CODE = new Code();
     private CommandType type;
 
-    private HashMap<String,String> mapCmd;
-    private HashMap<String,String> mapJump;
-    private HashMap<String,String> mapMem;
-    private String memAlloc;
-    private String cmd;
-    private String jump;
+    private HashMap<String,String> mapCmd, mapJump, mapMem;
 
     public static Code getInstance() {
         return CODE;
@@ -23,18 +16,16 @@ public final class Code {
 
     public String getBin(String currentCommand) {
         setType(currentCommand);
-        if (type == CommandType.C_COMMAND){
-            initFields(currentCommand);
-            return buildBin();
+        if (type == CommandType.C_COMMAND) {
+            return getBinForCCommand(currentCommand);
         }
         if (type == CommandType.A_COMMAND) {
-            return initFieldForA(currentCommand);
+            return getBinForACommand(currentCommand);
         }
         return null;
     }
 
-    //TODO rename
-    private String initFieldForA(String currentCommand) {
+    private String getBinForACommand(String currentCommand) {
         String cmd = currentCommand.substring(1);
         int parseInt = Integer.parseInt(cmd);
 
@@ -42,25 +33,22 @@ public final class Code {
         int fill = 16 - num.length();
 
         char[] chars = new char[fill];
-        Arrays.fill(chars,'0');
+        Arrays.fill(chars, '0');
 
         return String.copyValueOf(chars) + num;
     }
 
     private void setType(String currentCommand) {
-        if (currentCommand.charAt(0) == '@'){
+        if (currentCommand.charAt(0) == '@') {
             type = CommandType.A_COMMAND;
         } else {
             type = CommandType.C_COMMAND;
         }
     }
 
-    @NotNull
-    private String buildBin() {
-        String binMem = mapMem.get(memAlloc);
-        String binCmd = mapCmd.get(cmd);
-        String binJump = mapJump.get(jump);
-        return "111" + binCmd + binMem + binJump;
+    private String getBinForCCommand(String currentCommand) {
+        String[] parts = splitCurrentCommand(currentCommand);
+        return "111" + parts[0] + parts[1] + parts[2];
     }
 
     private Code() {
@@ -69,7 +57,7 @@ public final class Code {
         mapPutDestination();
     }
 
-    private void initFields(String currentCommand) {
+    private String[] splitCurrentCommand(String currentCommand) {
         if (!currentCommand.contains("=")) {
             currentCommand = '=' + currentCommand;
         }
@@ -78,16 +66,7 @@ public final class Code {
             currentCommand = currentCommand + ';';
         }
 
-        //TODO refactor to return Array of strings
-        String[] split = currentCommand.split("[=;]");
-        String[] splitEnsure = Arrays.copyOf(split,3);
-
-        memAlloc = splitEnsure[0];
-        if (memAlloc.equals("")){
-            memAlloc = null;
-        }
-        cmd = splitEnsure[1];
-        jump = splitEnsure[2];
+        return currentCommand.split("[=;]", -1);
     }
 
     //TODO make external file
@@ -125,7 +104,7 @@ public final class Code {
 
     private void mapPutJump() {
         mapJump = new HashMap<>();
-        mapJump.put(null, "000");
+        mapJump.put("", "000");
         mapJump.put("JGT", "001");
         mapJump.put("JEQ", "010");
         mapJump.put("JGE", "011");
@@ -137,7 +116,7 @@ public final class Code {
 
     private void mapPutDestination() {
         mapMem = new HashMap<>();
-        mapMem.put(null, "000");
+        mapMem.put("", "000");
         mapMem.put("M", "001");
         mapMem.put("D", "010");
         mapMem.put("MD", "011");

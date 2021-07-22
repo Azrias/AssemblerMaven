@@ -34,11 +34,12 @@ public class Launcher {
     }
 
     private File createTmpFile() {
-        try {
-            return File.createTempFile("temp", "asm");
-        } catch (IOException e) {
-            throw new RuntimeException("creteTmpFIle went wrong");
-        }
+        //try {
+            //return File.createTempFile("temp", "asm");
+            return new File("D:\\downloads\\nand2tetris\\nand2tetris\\projects\\06\\pong\\tmp");
+        //} catch (IOException e) {
+        //    throw new RuntimeException("creteTmpFIle went wrong");
+        //}
     }
 
     private void createHackFile(File input, String output) {
@@ -69,9 +70,9 @@ public class Launcher {
             parser.advance();
             String currentCommand = parser.getCurrentCommand();
             if (code.getType(currentCommand) == CommandType.A_COMMAND
-            && table.contains(currentCommand.substring(1))) {
-                    String cmd = table.getAddress(currentCommand.substring(1));
-                    tmpFileWriter.append(cmd).append("\n");
+            && table.contains(currentCommand)) {
+                    String cmd = table.getAddress(currentCommand);
+                    tmpFileWriter.append("@").append(cmd).append("\n");
 
             } else {
                 tmpFileWriter.append(currentCommand).append("\n");

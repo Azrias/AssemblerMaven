@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class SymbolTable {
 
-    private HashMap<String,String> map;
+    private final HashMap<String,String> map;
 
     public SymbolTable(){
         map = new HashMap<>();
@@ -15,10 +15,10 @@ public class SymbolTable {
     }
 
     public boolean contains(String symbol){
-        return map.containsKey(symbol);
+        return map.containsKey(symbol.substring(1));
     }
 
     public String getAddress(String symbol){
-        return map.get(symbol);
+        return map.get(symbol.substring(1));
     }
 }

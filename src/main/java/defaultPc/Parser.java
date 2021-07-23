@@ -43,7 +43,8 @@ public class Parser {
 
     public void putToTableIfIsSymbolCommand(SymbolTable table){
         if (isSymbolCommand()){
-            table.addEntry(currentCommand.substring(1),counter);
+            currentCommand = currentCommand.replaceAll("[@()]","");
+            table.addEntry(currentCommand,counter);
             return;
         }
         counter++;

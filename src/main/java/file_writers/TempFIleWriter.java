@@ -37,7 +37,7 @@ public class TempFIleWriter {
     private File createTmpFile() {
         //try {
         //return File.createTempFile("temp", "asm");
-        return new File("D:\\downloads\\nand2tetris\\nand2tetris\\projects\\06\\pong\\tmp");
+        return new File("D:\\tem.txt");
         //} catch (IOException e) {
         //    throw new RuntimeException("creteTmpFIle went wrong");
         //}
@@ -59,6 +59,9 @@ public class TempFIleWriter {
             Code code = Code.getInstance();
             parser.advance();
             String currentCommand = parser.getCurrentCommand();
+            if (code.getType(currentCommand) == CommandType.S_COMMAND){
+                continue;
+            }
             if (code.getType(currentCommand) == CommandType.A_COMMAND
                     && table.contains(currentCommand)) {
                 String cmd = table.getAddress(currentCommand);

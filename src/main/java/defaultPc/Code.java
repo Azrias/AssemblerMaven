@@ -41,6 +41,8 @@ public final class Code {
     public CommandType getType(String currentCommand){
         if (currentCommand.charAt(0) == '@') {
             return CommandType.A_COMMAND;
+        } else if (currentCommand.charAt(0) == '(') {
+            return CommandType.S_COMMAND;
         } else {
             return CommandType.C_COMMAND;
         }

@@ -14,7 +14,7 @@ public class Parser {
 
     private String currentCommand;
 
-    int counter = 0;
+    int counter = 16;
 
     public String getBinOfCurrentCommand(){
         Code code = Code.getInstance();

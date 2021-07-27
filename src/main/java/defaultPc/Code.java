@@ -61,7 +61,7 @@ public final class Code {
         String binMem = mapMem.get(parts[0]);
         String binCmd = mapCmd.get(parts[1]);
         String binJump = mapJump.get(parts[2]);
-        return "111" + binMem + binCmd + binJump;
+        return "111" + binCmd + binMem + binJump;
     }
 
     private Code() {

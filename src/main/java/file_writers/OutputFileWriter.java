@@ -33,6 +33,7 @@ public class OutputFileWriter {
             parser.advance();
             String currentCommand = parser.getBinOfCurrentCommand();
             fileWriter.write(currentCommand + "\n");
+            System.out.println(currentCommand);
         }
     }
 }

@@ -60,6 +60,7 @@ public class TempFIleWriter {
             parser.advance();
             String currentCommand = parser.getCurrentCommand();
             currentCommand = currentCommand.replaceAll("\\s", "");
+
             if (code.getType(currentCommand) == CommandType.S_COMMAND){
                 continue;
             }

@@ -42,7 +42,7 @@ public class Parser {
     }
 
     public void putToTableIfIsSymbolCommand(SymbolTable table){
-        if (isSymbolCommand()){
+        if (isSymbolCommand() && !table.contains(currentCommand)){
             currentCommand = currentCommand.replaceAll("[@()]","");
             table.addEntry(currentCommand,counter);
             return;
@@ -54,15 +54,15 @@ public class Parser {
         if (currentCommand.charAt(0) == '(') {
             return true;
         }
-        if (!(currentCommand.charAt(0) == '@')) {
-            return false;
+        if (currentCommand.charAt(0) == '@') {
+            String subStr = currentCommand.substring(1);
+            try {
+                Integer.parseInt(subStr);
+                return false;
+            } catch (NumberFormatException e) {
+                return true;
+            }
         }
-        String subStr = currentCommand.substring(1);
-        try {
-            Integer.parseInt(subStr);
-            return false;
-        } catch (NumberFormatException e) {
-            return true;
-        }
+        return false;
     }
 }

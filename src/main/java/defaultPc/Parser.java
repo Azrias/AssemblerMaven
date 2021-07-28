@@ -14,7 +14,8 @@ public class Parser {
 
     private String currentCommand;
 
-    int counter = 16;
+    int counter = 0;
+    int counter1 = 15;
 
     public String getBinOfCurrentCommand(){
         Code code = Code.getInstance();
@@ -50,10 +51,20 @@ public class Parser {
         counter++;
     }
 
-    private boolean isSymbolCommand(){
-        if (currentCommand.charAt(0) == '(') {
-            return true;
+    public void putToTableIfIsASymbolCommand(SymbolTable table){
+        if (isSymbolicACommand() && !table.contains(currentCommand)){
+            currentCommand = currentCommand.replaceAll("[@()]","");
+            table.addEntry(currentCommand,counter1);
+            counter1++;
+            return;
         }
+    }
+
+    private boolean isSymbolCommand(){
+        return currentCommand.charAt(0) == '(';
+    }
+
+    public boolean isSymbolicACommand(){
         if (currentCommand.charAt(0) == '@') {
             String subStr = currentCommand.substring(1);
             try {

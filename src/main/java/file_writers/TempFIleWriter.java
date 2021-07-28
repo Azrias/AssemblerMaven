@@ -82,6 +82,7 @@ public class TempFIleWriter {
         while (parser.hasMoreCommands()) {
             parser.advance();
             parser.putToTableIfIsSymbolCommand(table);
+            parser.putToTableIfIsASymbolCommand(table);
         }
         return table;
     }

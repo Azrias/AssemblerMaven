@@ -56,7 +56,6 @@ public class Parser {
             currentCommand = currentCommand.replaceAll("[@()]","");
             table.addEntry(currentCommand,counter1);
             counter1++;
-            return;
         }
     }
 

@@ -65,10 +65,11 @@ public class TempFIleWriter {
                 continue;
             }
             if (code.getType(currentCommand) == CommandType.A_COMMAND) {
-                if (table.contains(currentCommand)) {
-                    String cmd = table.getAddress(currentCommand);
-                    tmpFileWriter.append("@").append(cmd).append("\n");
-                }
+
+                table.contains(currentCommand)) {
+                String cmd = table.getAddress(currentCommand);
+                tmpFileWriter.append("@").append(cmd).append("\n");
+
             } else {
                 tmpFileWriter.append(currentCommand).append("\n");
             }

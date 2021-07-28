@@ -8,10 +8,10 @@ public class SymbolTable {
 
     public SymbolTable(){
         map = new HashMap<>();
-        initPredefSymbols();
+        initPredefineSymbols();
     }
 
-    private void initPredefSymbols() {
+    private void initPredefineSymbols() {
         map.put("SP","0");
         map.put("LCL","1");
         map.put("ARG","2");
@@ -34,7 +34,6 @@ public class SymbolTable {
         map.put("R13","13");
         map.put("R14","14");
         map.put("R15","15");
-        map.put("R16","16");
 
         map.put("SCREEN","16384");
         map.put("KBD","24576");

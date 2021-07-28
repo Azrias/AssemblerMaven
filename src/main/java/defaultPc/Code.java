@@ -5,17 +5,17 @@ import java.util.HashMap;
 
 public final class Code {
 
-    private static final Code CODE = new Code();
-    private CommandType type;
-
     private HashMap<String,String> mapCmd, mapJump, mapMem;
 
-    public static Code getInstance() {
-        return CODE;
+    public Code() {
+        createMapCmd();
+        mapPutJump();
+        mapPutDestination();
     }
 
     public String getBin(String currentCommand) {
-        setType(currentCommand);
+        CommandType type = getType(currentCommand);
+
         if (type == CommandType.C_COMMAND) {
             return getBinForCCommand(currentCommand);
         }
@@ -23,6 +23,16 @@ public final class Code {
             return getBinForACommand(currentCommand);
         }
         return null;
+    }
+
+    public CommandType getType(String currentCommand){
+        if (currentCommand.charAt(0) == '@') {
+            return CommandType.A_COMMAND;
+        } else if (currentCommand.charAt(0) == '(') {
+            return CommandType.S_COMMAND;
+        } else {
+            return CommandType.C_COMMAND;
+        }
     }
 
     private String getBinForACommand(String currentCommand) {
@@ -38,24 +48,6 @@ public final class Code {
         return String.copyValueOf(chars) + num;
     }
 
-    public CommandType getType(String currentCommand){
-        if (currentCommand.charAt(0) == '@') {
-            return CommandType.A_COMMAND;
-        } else if (currentCommand.charAt(0) == '(') {
-            return CommandType.S_COMMAND;
-        } else {
-            return CommandType.C_COMMAND;
-        }
-    }
-
-    private void setType(String currentCommand) {
-        if (currentCommand.charAt(0) == '@') {
-            type = CommandType.A_COMMAND;
-        } else {
-            type = CommandType.C_COMMAND;
-        }
-    }
-
     private String getBinForCCommand(String currentCommand) {
         String[] parts = splitCurrentCommand(currentCommand);
         String binMem = mapMem.get(parts[0]);
@@ -64,11 +56,6 @@ public final class Code {
         return "111" + binCmd + binMem + binJump;
     }
 
-    private Code() {
-        createMapCmd();
-        mapPutJump();
-        mapPutDestination();
-    }
 
     private String[] splitCurrentCommand(String currentCommand) {
         if (!currentCommand.contains("=")) {

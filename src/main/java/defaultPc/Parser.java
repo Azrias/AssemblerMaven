@@ -8,17 +8,17 @@ public class Parser {
 
     private final BufferedReader bufferedReader;
 
+    private String currentCommand;
+    Code code = new Code();
+
     public String getCurrentCommand() {
         return currentCommand;
     }
 
-    private String currentCommand;
-
-    int counter = 0;
-    int counter1 = 15;
+    int counterForSymbols = 0;
+    int counterForCommands = 14;
 
     public String getBinOfCurrentCommand(){
-        Code code = Code.getInstance();
         return code.getBin(currentCommand);
     }
 
@@ -42,20 +42,19 @@ public class Parser {
         }
     }
 
-    public void putToTableIfIsSymbolCommand(SymbolTable table){
+    public void putToTableIfSymbolCommand(SymbolTable table){
         if (isSymbolCommand() && !table.contains(currentCommand)){
             currentCommand = currentCommand.replaceAll("[@()]","");
-            table.addEntry(currentCommand,counter);
+            table.addEntry(currentCommand, counterForSymbols);
             return;
         }
-        counter++;
+        counterForSymbols++;
     }
 
-    public void putToTableIfIsASymbolCommand(SymbolTable table){
+    public void putToTableIfCommand(SymbolTable table){
         if (isSymbolicACommand() && !table.contains(currentCommand)){
             currentCommand = currentCommand.replaceAll("[@()]","");
-            table.addEntry(currentCommand,counter1);
-            counter1++;
+            table.addEntry(currentCommand, ++counterForCommands);
         }
     }
 
@@ -63,7 +62,7 @@ public class Parser {
         return currentCommand.charAt(0) == '(';
     }
 
-    public boolean isSymbolicACommand(){
+    private boolean isSymbolicACommand(){
         if (currentCommand.charAt(0) == '@') {
             String subStr = currentCommand.substring(1);
             try {

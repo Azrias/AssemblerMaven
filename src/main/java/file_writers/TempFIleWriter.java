@@ -19,7 +19,7 @@ public class TempFIleWriter {
     }
 
     public File createAndFillTmpFile() {
-        SymbolTable table = createTable(input);
+        SymbolTable table = createTableForCommand(input);
 
         File file = createTmpFile();
 
@@ -35,19 +35,18 @@ public class TempFIleWriter {
     }
 
     private File createTmpFile() {
-        //try {
-        //return File.createTempFile("temp", "asm");
-        return new File("D:\\tem.txt");
-        //} catch (IOException e) {
-        //    throw new RuntimeException("creteTmpFIle went wrong");
-        //}
+        try {
+            return File.createTempFile("temp", "asm");
+        } catch (IOException e) {
+            throw new RuntimeException("creteTmpFIle went wrong");
+        }
     }
 
-    private SymbolTable createTable(String input) {
+    private SymbolTable createTableForCommand(String input) {
         SymbolTable table = null;
         try (FileReader fileReader = new FileReader(input)) {
             Parser parser = new Parser(fileReader);
-            table = createSymbolTable(parser);
+            table = createCommandTable(parser);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,8 +54,9 @@ public class TempFIleWriter {
     }
 
     private void writeToTmp(SymbolTable table, FileWriter tmpFileWriter, Parser parser) throws IOException {
+        Code code = new Code();
+
         while (parser.hasMoreCommands()) {
-            Code code = Code.getInstance();
             parser.advance();
             String currentCommand = parser.getCurrentCommand();
             currentCommand = currentCommand.replaceAll("\\s", "");
@@ -64,27 +64,25 @@ public class TempFIleWriter {
             if (code.getType(currentCommand) == CommandType.S_COMMAND){
                 continue;
             }
-            if (code.getType(currentCommand) == CommandType.A_COMMAND) {
-                if (table.contains(currentCommand)) {
+
+            if (code.getType(currentCommand) == CommandType.A_COMMAND
+                && table.contains(currentCommand)) {
                     String cmd = table.getAddress(currentCommand);
                     tmpFileWriter.append("@").append(cmd).append("\n");
-                    System.out.println("@" + cmd);
-                }
             } else {
                 tmpFileWriter.append(currentCommand).append("\n");
-                System.out.println(currentCommand);
             }
         }
     }
 
-    private SymbolTable createSymbolTable(Parser parser) {
-        SymbolTable table = new SymbolTable();
+    private SymbolTable createCommandTable(Parser parser) {
+        SymbolTable tableForCommand = new SymbolTable();
         while (parser.hasMoreCommands()) {
             parser.advance();
-            parser.putToTableIfIsSymbolCommand(table);
-            parser.putToTableIfIsASymbolCommand(table);
+            parser.putToTableIfCommand(tableForCommand);
+            parser.putToTableIfSymbolCommand(tableForCommand);
         }
-        return table;
+        return tableForCommand;
     }
 
 }

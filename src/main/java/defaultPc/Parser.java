@@ -54,7 +54,7 @@ public class Parser {
         if (currentCommand.charAt(0) == '(') {
             return true;
         }
-        if (currentCommand.charAt(0) == '@') {
+        if (!(currentCommand.charAt(0) == '@')) {
             return false;
         }
         String subStr = currentCommand.substring(1);
